@@ -35,8 +35,8 @@ struct Led
 //----------------------------------------------------------------------------
 // Define network credentials with WiFi details
 //----------------------------------------------------------------------------
-const char *WIFI_SSID = "ebena.mobile";
-const char *WIFI_PASS = "eHome@Me";
+const char *WIFI_SSID = "your_wifi_ssid";
+const char *WIFI_PASS = "your_wifi_password";
 
 //---------------------------------------------------------------------------
 // Define global variables
@@ -44,12 +44,8 @@ const char *WIFI_PASS = "eHome@Me";
 
 // DHT Sensors
 DHT dht(DHT_PIN, DHT_TYPE);
-float temp = 0.00,
-      float hum = 0.00;
-
-// allocate static Json Document
-StaticJsonDocument<200> json; // sending json document
-StaticJsonDocument<64> doc;   // recieved json document
+float temp = 0.00;
+float hum = 0.00;
 
 //
 
@@ -65,9 +61,9 @@ Led led_4 = {LED_04_PIN, false};
 //---------------------------------------------------------------------------
 
 // Update DHT Readings
-updateDHTReadings()
+void updateDHTReadings()
 {
-    delay(100);
+   // delay(100);
 
     float t = float(dht.readTemperature());
     float h = float(dht.readHumidity());
@@ -92,20 +88,20 @@ updateDHTReadings()
 }
 
 // get sensors updates
-String getSensorsUpdates()
-{
-    json["led_01"] = led_1.on ? "on" : "off";
-    json["led_02"] = led_2.on ? "on" : "off";
-    json["led_03"] = led_3.on ? "on" : "off";
-    json["led_04"] = led_4.on ? "on" : "off";
-    json["ldr"] = String(analogRead(LDR_PIN));
-    json["temp"] = String(temp);
-    json["hum"] = String(hum);
-
-    String data;
-    serializeJson(json, data);
-    return data;
-}
+//String getSensorsUpdates()
+//{
+//    json["led_01"] = led_1.on ? "on" : "off";
+//    json["led_02"] = led_2.on ? "on" : "off";
+//    json["led_03"] = led_3.on ? "on" : "off";
+//    json["led_04"] = led_4.on ? "on" : "off";
+//    json["ldr"] = String(analogRead(LDR_PIN));
+//    json["temp"] = String(temp);
+//    json["hum"] = String(hum);
+//
+//    String data;
+//    serializeJson(json, data);
+//    return data;
+//}
 
 //---------------------------------------------------------------------------
 //  Create AsyncWebServer object at PORT 80
@@ -207,39 +203,27 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 // -----------------------------------------------------------------------------
 
 // inform client of updates
-void notifyClients(AsyncWebSocketClient *client)
+void notifyClients()
 {
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject &json = jsonBuffer.createObject();
+    const int size = JSON_OBJECT_SIZE(8);
+    StaticJsonDocument<size> json;
+    
+    json["led_01"] .set( led_1.on ? "on" : "off");
+    json["led_02"] .set( led_2.on ? "on" : "off");
+    json["led_03"] .set( led_3.on ? "on" : "off");
+    json["led_04"] .set( led_4.on ? "on" : "off");
+    json["ldr"] .set( String(analogRead(LDR_PIN)*100/4049));
+    json["temp"] .set( String(temp));
+    json["hum"] .set( String(hum));
 
-    json["led_01"] = led_1.on ? "on" : "off";
-    json["led_02"] = led_2.on ? "on" : "off";
-    json["led_03"] = led_3.on ? "on" : "off";
-    json["led_04"] = led_4.on ? "on" : "off";
-    json["ldr"] = String(analogRead(LDR_PIN));
-    json["temp"] = String(temp);
-    json["hum"] = String(hum);
-
-    size_t len = json.measureLength();
-
-    AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len); //  creates a buffer (len + 1) for you.
-    if (buffer)
-    {
-        json.printTo((char *)buffer->get(), len + 1);
-        if (client)
-        {
-            client->text(buffer);
-        }
-        else
-        {
-            ws.textAll(buffer);
-        }
-    }
+    String data;
+    serializeJson(json, data);
+    ws.textAll(data);
 }
 
 // void handlingIncomingData
 
-handlingIncomingData(void *arg, uint8_t *data, size_t len)
+void handlingIncomingData(void *arg, uint8_t *data, size_t len)
 {
     AwsFrameInfo *info = (AwsFrameInfo *)arg;
 
@@ -308,4 +292,5 @@ void loop()
     updateDHTReadings();
     ws.cleanupClients();
     onboard_led.update();
+    notifyClients();
 }

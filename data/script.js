@@ -1,13 +1,70 @@
 /* ESP32 WEBSOCKET jAVASCRIPT FILE
 /   -----------------------
-/ BY: OLAYIDE AJAYI
+/ © 2022 Olayide AJAYI 
 /--------------------------
 source: https://canvas-gauges.com/documentation/user-guide/using-as-component
 */
+var gateway = `ws://${window.location.hostname}/ws`;
+var websocket;
 
-// Get current sensor readings when the page loads  
-window.addEventListener('load', getReadings);
 
+// ----------------------------------------------------------------------------
+// Initialization
+// ----------------------------------------------------------------------------
+
+window.addEventListener('load', onLoad);
+
+function onLoad(event) {
+    initWebSocket();
+}
+
+// ----------------------------------------------------------------------------
+// WebSocket handling
+// ----------------------------------------------------------------------------
+
+function initWebSocket() {
+    console.log('Trying to open a WebSocket connection...');
+    websocket = new WebSocket(gateway);
+    websocket.onopen = onOpen;
+    websocket.onclose = onClose;
+    websocket.onmessage = onMessage;
+}
+
+function onOpen(event) {
+    console.log('Connection opened');
+}
+
+function onClose(event) {
+    console.log('Connection closed');
+    setTimeout(initWebSocket, 2000);
+}
+
+function onMessage(event) {
+   // console.log(e.data);
+    //console.log("new_readings", e.data);
+    var myObj = JSON.parse(event.data);
+   // console.log(myObj);
+    gaugeTemp.value = myObj.temp;
+    gaugeHum.value = myObj.hum;
+    gaugeLdr.value = myObj.ldr;
+    document.getElementById("led1").className = myObj.led_01 == "on" ? "led on" : "led";
+    document.getElementById("led2").className = myObj.led_02 == "on" ? "led on" : "led";
+    document.getElementById("led3").className = myObj.led_03 == "on" ? "led on" : "led";
+    document.getElementById("led4").className = myObj.led_04 == "on" ? "led on" : "led";
+
+
+}
+
+
+//--------------------------------------------------------------------------
+// sensor info : sensorID_value/action e.g 1_on, 2_50, 10_toggle
+//--------------------------------------------------------------------------
+
+function onToggle(element) {    
+       var  ledNumber = element.id.charAt(element.id.length - 1);
+        console.log(ledNumber + '_' + "toggle");
+        websocket.send(ledNumber + '_' + "toggle");
+}
 
 
 // Create Temperature Gauge
@@ -58,10 +115,10 @@ var gaugeTemp = new LinearGauge({
     animationDuration: 1500,
     animationRule: "linear",
     barWidth: 10,
-  }).draw();
-    
-  // Create Humidity Gauge
-  var gaugeHum = new RadialGauge({
+}).draw();
+
+// Create Humidity Gauge
+var gaugeHum = new RadialGauge({
     renderTo: 'gauge-humidity',
     width: 300,
     height: 300,
@@ -79,7 +136,7 @@ var gaugeTemp = new LinearGauge({
         "60",
         "80",
         "100"
-  
+
     ],
     minorTicks: 4,
     strokeTicks: true,
@@ -103,10 +160,10 @@ var gaugeTemp = new LinearGauge({
     needleCircleInner: false,
     animationDuration: 1500,
     animationRule: "linear"
-  }).draw();
+}).draw();
 
-  //LDR gauge
-  var gaugeLdr = new LinearGauge({
+//LDR gauge
+var gaugeLdr = new LinearGauge({
     renderTo: 'gauge-ldr',
     width: 400,
     height: 80,
@@ -145,67 +202,7 @@ var gaugeTemp = new LinearGauge({
     colorValueBoxBackground: "#f1fbfc",
     valueDec: 2,
     valueInt: 2
-    
+
 }).draw();
-  
 
-  // Function to get current readings on the webpage when it loads for the first time
-function getReadings(){
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var myObj = JSON.parse(this.responseText);
-        console.log(myObj);
-        var temp = myObj.temperature;
-        var hum = myObj.humidity;
-        var ldr = myObj.ldr;
-        var led1 = myObj.led1;
-        var led2 = myObj.led2;
-        var led3 = myObj.led3;
-        var led4 = myObj.led4;
 
-        gaugeTemp.value = temp;
-        gaugeHum.value = hum;
-        gaugeLdr.value = ldr;
-        document.getElementById("led1").style = led1 == "on" ? "led on" : "led";
-        document.getElementById("led2").style = led2 == "on" ? "led on" : "led";
-        document.getElementById("led3").style = led3 == "on" ? "led on" : "led";
-        document.getElementById("led4").style = led4 == "on" ? "led on" : "led";
-      }
-    }; 
-    xhr.open("GET", "/readings", true);
-    xhr.send();
-  }
-  
-  if (!!window.EventSource) {
-    var source = new EventSource('/events');
-    
-    source.addEventListener('open', function(e) {
-      console.log("Events Connected");
-    }, false);
-  
-    source.addEventListener('error', function(e) {
-      if (e.target.readyState != EventSource.OPEN) {
-        console.log("Events Disconnected");
-      }
-    }, false);
-    
-    source.addEventListener('message', function(e) {
-      console.log("message", e.data);
-    }, false);
-    
-    source.addEventListener('new_readings', function(e) {
-      console.log("new_readings", e.data);
-      var myObj = JSON.parse(e.data);
-      console.log(myObj);
-      gaugeTemp.value = myObj.temperature;
-      gaugeHum.value = myObj.humidity;
-      gaugeLdr.value = myObj.ldr;
-      document.getElementById("led1").style = myObj.led1 == "on" ? "led on" : "led";
-      document.getElementById("led2").style = myObj.led2 == "on" ? "led on" : "led";
-      document.getElementById("led3").style = myObj.led3 == "on" ? "led on" : "led";
-      document.getElementById("led4").style = myObj.led4 == "on" ? "led on" : "led";
-  
-
-    }, false);
-  }
