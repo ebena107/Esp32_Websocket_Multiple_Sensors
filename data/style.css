@@ -3,3 +3,176 @@
 / BY: OLAYIDE AJAYI
 /--------------------------
 */
+
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400');
+
+html{
+	display: inline-block;
+	font-family: 'Lato', sans-serif;
+	text-align: center;
+}
+
+h1{
+	font-weight: 300;
+	font-size: 1.8rem;
+	color: #CCC;
+}
+p{
+	font-size: 1.4rem;
+}
+.topNav{
+	overflow: hidden;
+	background-color: #0A1128
+}
+body{
+	margin: 0;
+	
+}
+.content { 
+	padding: 5%;
+  }
+
+/* grid layout*/
+
+.topnav { grid-area: header; }
+.temp { grid-area: temp; }
+.hum { grid-area: hum; }
+.switches { grid-area: switches; }
+.bottomnav { grid-area: footer; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'header header header header header'
+    'menu temp temp hum hum'
+	'menu switches switches switches switches'
+    'menu footer footer footer footer ';
+  gap: 10px;
+  background-color: #666;
+  padding: 10px;
+}
+
+
+.panel-grid{
+	max-width: 1200px; 
+	margin: 0 auto; 
+	display: grid; 
+	grid-gap: 2rem; 
+	grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+}
+.panel{
+	background-color: #666;
+	box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+	padding: 20px 0px;
+	margin-bottom: 30px;
+	
+}
+.panel>div{
+align-items:baseline;
+}
+.panel-title{
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #ccc
+}
+
+/*/ toggle switch css-------------------------------------------
+// source: https://github.com/arduinoguy007/Arduino-IoT-Dasboard/blob/main/index.html
+/-------------------------------------------------------------*/
+.toggle {
+	margin: 10px;
+	position:relative;
+	vertical-align: bottom;
+	margin-top:2em;
+	   width:96px;
+	height:32px;
+	-webkit-appearance: none;
+	background: linear-gradient(0deg, #333, #000);
+	opacity: 0.8;
+	outline: none;
+	border-radius: 16px;
+	box-shadow: 0 0 0 4px #353535, 0 0 0 5px #3e3e3e, inset 0 0 10px rgba(0,0,0,1);
+	}
+	.toggle:before {
+	content:'';
+	position:absolute;
+	top:0;
+	left:0;
+	width:64px;
+	height:32px;
+	background: linear-gradient(0deg, #000, #6b6b6b);
+	border-radius: 16px;
+	box-shadow: 0 0 0 1px #232323;
+	transform: scale(.98,.96);
+	transition:.5s;
+	}
+.toggle:checked:before {
+	left:32px;
+	}
+.toggle:checked:after { 
+	left:88px;
+	}
+.toggle:checked:nth-of-type(1) {
+	background: linear-gradient(0deg, #70a1ff, #1e90ff);
+	box-shadow: 0 0 0 4px #353535, 0 0 0 5px #3e3e3e, inset 0 0 10px rgba(0,0,0,1);
+	}
+.toggle:hover {
+	  opacity: 1;
+	}
+/* end of toggle switch*/
+
+
+/* LAMP */
+  .led{
+	position: relative;
+	height: 2rem;
+	width: 2rem;
+	border: 2px solid rgb(87, 87, 87);
+	border-radius: 2.5em;
+	background-image: radial-gradient(farthest-corner at 50% 20%, #8f7f7f 0%, #330000 100%);
+	box-shadow: 0 0.5em 1em rgba(109, 82, 82, 0.3);
+	display: inline-block;
+  }
+  .led.on{
+	background-image: radial-gradient(farthest-corner at 50% 75%, red 0%, #990000 100%);
+	box-shadow: 0 1em 1.5em rgba(255, 0, 0, 0.5);
+  }
+  .led:after {
+	content: '';
+	position: absolute;
+	top: .3em;
+	left: .5em;
+	width: 60%;
+	height: 40%;
+	border-radius: 60%;
+	background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+  }
+  
+  /* lamp ends here*/
+  td {
+	color:white;
+	border: 0px solid white;
+	white-space: nowrap;
+	vertical-align: bottom;
+	}
+#table_G1{
+	table-layout: auto;
+	width: 70%;
+	height: 200px;
+	border: 0px solid white;
+	text-align:center;
+	}
+#table_G2{
+	table-layout: auto;
+	width: 50%;
+	height: auto;
+	border: 0px solid white;
+	text-align:center;
+	}
+#table_S{
+	table-layout: auto;
+	width: 45%;
+	height: 100px;
+	border: 0px solid white;
+	text-align:center;
+	}

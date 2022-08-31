@@ -1,15 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>ESP32 WEBSOCKET</title>
-    
+
+    <script src="gauge.min.js"></script>
+    <title>ESP32 WEBSOCKET (Multiple Sensor)</title>
+
 </head>
+
 <body>
-    
+
+    <div class="content grid-container">
+        <div class="topnav">
+            <h1>
+                ESP32 WEBSOCKET
+            </h1>
+        </div>
+        <div class="panel temp">
+            <div>
+                <p class="panel-title">Temperature</p>
+                <canvas id="gauge-temperature"></canvas>
+            </div>
+        </div>
+        <div class="panel hum">
+            <div>
+                <p class="panel-title">Humidity</p>
+                <canvas id="gauge-humidity"></canvas>
+            </div>
+            <div>
+                <p class="panel-title">Brightness</p>
+                <canvas id="gauge-ldr"></canvas>
+            </div>
+        </div>
+        <div class="panel switches">
+            <table id="table_S">
+                <tr>
+                    <td>
+                        <span class="led" id="led1"></span>
+                    <td width=75></td>
+                    <td>
+                        <span class="led" id="led2"></span>
+                    </td>
+                    <td width=75></td>
+                    <td>
+                        <span class="led" id="led3"></span>
+                    </td>
+                    <td width=75></td>
+                    <td>
+                        <span class="led" id="led4"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <form name="SW_form">
+                        <td><input type="checkbox" class="toggle" name="SW1" value="0"
+                                onclick="SwitchCheck()" /><br /><br /></td>
+                        <td width="75"></td>
+                        <td><input type="checkbox" class="toggle" name="SW2" value="0"
+                                onclick="SwitchCheck()" /><br /><br /></td>
+                        <td width="75"></td>
+                        <td><input type="checkbox" class="toggle" name="SW3" value="0"
+                                onclick="SwitchCheck()" /><br /><br /></td>
+                        <td width="75"></td>
+                        <td><input type="checkbox" class="toggle" name="SW4" value="0"
+                                onclick="SwitchCheck()" /><br /><br /></td>
+                    </form>
+                </tr>
+                <tr>
+                    <td>
+                        <H1>Switch 1</H1>
+                    <td width=75></td>
+                    <td>
+                        <H1>Switch 2</H1>
+                    </td>
+                    <td width=75></td>
+                    <td>
+                        <H1>Switch 3</H1>
+                    </td>
+                    <td width=75></td>
+                    <td>
+                        <H1>Switch 4</H1>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+        <div class="bottomnav">
+            <h2> (c) ebenaTek</h2>
+        </div>
+    </div>
+
+
+    </div>
 </body>
 <script src="script.js"></script>
+
 </html>
