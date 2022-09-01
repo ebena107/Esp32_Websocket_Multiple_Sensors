@@ -47,6 +47,8 @@ DHT dht(DHT_PIN, DHT_TYPE);
 float temp = 0.00;
 float hum = 0.00;
 
+button[4] = [0,0,0,0];
+
 //
 
 // LEDs

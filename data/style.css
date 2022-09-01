@@ -48,8 +48,11 @@ body {
 	grid-area: hum;
 }
 
-.switches {
+.light {
 	grid-area: switches;
+}
+.power {
+	grid-area: power;
 }
 
 .bottomnav {
