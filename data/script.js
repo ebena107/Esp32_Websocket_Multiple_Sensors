@@ -40,10 +40,9 @@ function onClose(event) {
 }
 
 function onMessage(event) {
-   // console.log(e.data);
-    //console.log("new_readings", e.data);
+   
     var myObj = JSON.parse(event.data);
-   // console.log(myObj);
+   
     gaugeTemp.value = myObj.temp;
     gaugeHum.value = myObj.hum;
     gaugeLdr.value = myObj.ldr;

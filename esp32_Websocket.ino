@@ -87,22 +87,6 @@ void updateDHTReadings()
     }
 }
 
-// get sensors updates
-//String getSensorsUpdates()
-//{
-//    json["led_01"] = led_1.on ? "on" : "off";
-//    json["led_02"] = led_2.on ? "on" : "off";
-//    json["led_03"] = led_3.on ? "on" : "off";
-//    json["led_04"] = led_4.on ? "on" : "off";
-//    json["ldr"] = String(analogRead(LDR_PIN));
-//    json["temp"] = String(temp);
-//    json["hum"] = String(hum);
-//
-//    String data;
-//    serializeJson(json, data);
-//    return data;
-//}
-
 //---------------------------------------------------------------------------
 //  Create AsyncWebServer object at PORT 80
 //---------------------------------------------------------------------------
