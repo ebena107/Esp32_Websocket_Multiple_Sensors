@@ -10,9 +10,6 @@
 - ![ArduinoJson](https://arduinojson.org/v6/doc/)
 - ![DHT]
 
-## GAUGES API
-  ![canvas gauges](https://canvas-gauges.com/documentation/user-guide/) is a powerful api for drawing various custom gauges, linear or radial, for iot projects.
-
 ```
 #include <DHT.h>
 #include <WiFi.h>
@@ -21,6 +18,11 @@
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
 ```
+
+## GAUGES API
+  ![canvas gauges](https://canvas-gauges.com/documentation/user-guide/) is a powerful api for drawing various custom gauges, linear or radial, for iot projects.
+
+
 
 ## PIN Connections
 ![](/src/wiring_diagram.png)
